@@ -35,7 +35,7 @@ export class ContactUsPage {
     let m = this.commentField.nativeElement.value;
     let data = {
       "Name": "Debug app",
-      "Email": "dan.habot@gmail.com",
+      "Email": "dan@bigidea.co.il",
       "Message": m
     };
     this.http.post("http://startups.cdi-negev.com/send-email.php", data).subscribe(d => console.log(d));
