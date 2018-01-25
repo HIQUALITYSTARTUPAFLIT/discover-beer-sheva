@@ -63,6 +63,10 @@ export class HomePage {
             }
           }
 
+          if (!r.hasOwnProperty("length")){
+            throw "Validation failed";
+          }
+
           resolve(r);
         });
       });
@@ -81,22 +85,22 @@ export class HomePage {
       heatmap.setMap(this.map);
     });
 
-    // load("cameras").then(d => {
-    //   this.showToast("Loaded security cameras");
-    //   for (var i = 0; i < d.length; i++){
-    //     let item = d[i];
-    //     this.placeMarker({
-    //       "lat": item.properties.Y,
-    //       "long": item.properties.X,
-    //       "title": "Camera",
-    //       "url": "../../assets/icon/camera-32.png",
-    //       "size": {
-    //         "x": 32,
-    //         "y": 32
-    //       }
-    //     });
-    //   }
-    // });
+    load("cameras").then(d => {
+      this.showToast("Loaded security cameras");
+      for (var i = 0; i < d.length; i++){
+        let item = d[i];
+        this.placeMarker({
+          "lat": item.properties.Y,
+          "long": item.properties.X,
+          "title": "Camera",
+          "url": "../../assets/icon/camera-32.png",
+          "size": {
+            "x": 32,
+            "y": 32
+          }
+        });
+      }
+    });
   }
 
   loadMaps() {
