@@ -1,6 +1,7 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { BrowserModule } from '@angular/platform-browser';
+import { HTTP } from '@ionic-native/http';
 
 
 import { MyApp } from './app.component';
@@ -8,6 +9,7 @@ import { HomePage } from '../pages/home/home';
 import { AboutPage } from '../pages/about/about';
 import { AlertPage } from '../pages/alert/alert';
 import { SettingsPage } from '../pages/settings/settings';
+import { ContactUsPage } from '../pages/contact-us/contact-us';
 
 import { IonicStorageModule } from '@ionic/storage';
 
@@ -24,6 +26,7 @@ import { HttpModule } from '@angular/http';
     AlertPage,
     AboutPage,
     SettingsPage,
+    ContactUsPage
   ],
   imports: [
     BrowserModule,
@@ -38,11 +41,13 @@ import { HttpModule } from '@angular/http';
     AlertPage,
     AboutPage,
     SettingsPage,
+    ContactUsPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     Geolocation,
+    HTTP,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
