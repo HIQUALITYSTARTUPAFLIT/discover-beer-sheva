@@ -17,6 +17,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { HttpModule } from '@angular/http';
+import { AppPreferences } from '@ionic-native/app-preferences';
+
 
 import { Vibration } from '@ionic-native/vibration';
 import { SMS } from '@ionic-native/sms';
@@ -52,6 +54,7 @@ import { SMS } from '@ionic-native/sms';
     HTTP,
     Vibration,
     SMS,
+    AppPreferences,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
