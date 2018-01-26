@@ -20,7 +20,8 @@
   <form (ngSubmit)="save()">
     <ion-item *ngFor="let item of template">
       <ion-label>{{item.title}}</ion-label>
-      <ion-input type={{item.type}} [(ngModel)]="result[item.title]" name={{item.title}}></ion-input>
+      <ion-input *ngIf="useInputTag(item.type)" type={{item.type}} [(ngModel)]="result[item.title]" name={{item.title}} clearInput></ion-input>
+      <ion-checkbox *ngIf="useCheckBox(item.type)"></ion-checkbox>
     </ion-item>
 
     <button ion-button type="submit" block>Save</button>

@@ -17,8 +17,20 @@ export class SettingsPage {
 
   template = [
     {
-      "title": "Test",
+      "title": "Keypad Timeout",
+      "type": "number"
+    },
+    {
+      "title": "Emergency Contact Number",
+      "type": "tel"
+    },
+    {
+      "title": "Custom message",
       "type": "text"
+    },
+    {
+      "title": "Send location",
+      "type": "bool"
     }
   ];
 
@@ -30,6 +42,14 @@ export class SettingsPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SettingsPage');
+  }
+
+  useInputTag(t){
+    return ["text", "password", "email", "number", "search", "tel", "url"].includes(t);
+  }
+
+  useCheckBox(t){
+    return ["bool"].includes(t);
   }
 
   save(){
