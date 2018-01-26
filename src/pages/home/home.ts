@@ -3,6 +3,7 @@ import { ActionSheetController, AlertController, App, LoadingController, NavCont
 import { Geolocation } from '@ionic-native/geolocation';
 import { Http } from '@angular/http';
 import * as utmObj from 'utm-latlng';
+import { AlertPage } from '../alert/alert';
 //var utmObj = require('utm-latlng');
 
 declare var google: any;
@@ -13,6 +14,8 @@ declare var google: any;
 })
 export class HomePage {
   @ViewChild('map') mapElement: ElementRef;
+  @ViewChild('alertButton') alertButton : ElementRef;
+  @ViewChild('openButton') openButton : ElementRef;
   addressElement: HTMLInputElement = null;
 
   map: any;
@@ -20,6 +23,7 @@ export class HomePage {
   error: any;
   currentregional: any;
   MYLOC: any;
+  keypadInput : any;
 
   constructor(
     public loadingCtrl: LoadingController,
@@ -34,6 +38,7 @@ export class HomePage {
     public geolocation: Geolocation,
     public http: Http,
   ) {
+    this.keypadInput = "";
     this.platform.ready().then(() => {
       this.loadMaps();
       this.loadMarkers();
@@ -63,6 +68,10 @@ export class HomePage {
             }
           }
 
+          if (!r.hasOwnProperty("length")){
+            throw "Validation failed";
+          }
+
           resolve(r);
         });
       });
@@ -81,22 +90,22 @@ export class HomePage {
       heatmap.setMap(this.map);
     });
 
-    // load("cameras").then(d => {
-    //   this.showToast("Loaded security cameras");
-    //   for (var i = 0; i < d.length; i++){
-    //     let item = d[i];
-    //     this.placeMarker({
-    //       "lat": item.properties.Y,
-    //       "long": item.properties.X,
-    //       "title": "Camera",
-    //       "url": "../../assets/icon/camera-32.png",
-    //       "size": {
-    //         "x": 32,
-    //         "y": 32
-    //       }
-    //     });
-    //   }
-    // });
+     load("cameras").then(d => {
+       this.showToast("Loaded security cameras");
+       for (var i = 0; i < d["length"]; i++){
+         let item = d[i];
+         this.placeMarker({
+           "lat": item.properties.Y,
+           "long": item.properties.X,
+           "title": "Camera",
+           "url": "../../assets/icon/camera-32.png",
+           "size": {
+             "x": 32,
+             "y": 32
+           }
+         });
+       }
+     });
   }
 
   loadMaps() {
@@ -277,4 +286,25 @@ placeMarker(options){
     toast.present();
   }
 
+  alertOpen(event){
+    console.log("Alert open");
+    alertButton.classList.toggle("invisible");
+    openButton.classList.toggle("invisible");
+  }
+
+  alert_start(event){
+    //this.showToast("Start");
+    event.target.classList.toggle("pressDown", true);
+    event.target.innerText = "Armed";
+
+    console.log(event.target.className);
+  }
+
+  alert_end(event){
+    //this.showToast("End");
+    event.target.classList.toggle("pressDown", false);
+    event.target.innerText = "Idle";
+    //this.keyPad.nativeElement.classList.toggle("invisible");
+    this.nav.push(AlertPage);
+  }
 }
