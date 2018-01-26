@@ -87,7 +87,7 @@ export class HomePage {
 
     load("cameras").then(d => {
       this.showToast("Loaded security cameras");
-      for (var i = 0; i < d.length; i++){
+      for (var i = 0; i < d["length"]; i++){
         let item = d[i];
         this.placeMarker({
           "lat": item.properties.Y,

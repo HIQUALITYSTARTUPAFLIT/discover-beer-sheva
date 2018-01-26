@@ -8,14 +8,21 @@
 
   <ion-navbar>
   	<button ion-button menuToggle>
-		<ion-icon name="menu"></ion-icon>
-	</button>
-    <ion-title>settings</ion-title>
+  		<ion-icon name="menu"></ion-icon>
+  	</button>
+    <ion-title>Settings</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+  <form (ngSubmit)="save()">
+    <ion-item *ngFor="let item of template">
+      <ion-label>{{item.title}}</ion-label>
+      <ion-input type={{item.type}} [(ngModel)]="result[item.title]" name={{item.title}}></ion-input>
+    </ion-item>
 
+    <button ion-button type="submit" block>Save</button>
+  </form>
 </ion-content>

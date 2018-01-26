@@ -15,11 +15,24 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class SettingsPage {
 
+  template = [
+    {
+      "title": "Test",
+      "type": "text"
+    }
+  ];
+
+  result : any;
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.result = {};
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SettingsPage');
   }
 
+  save(){
+    console.log(this.result);
+  }
 }
