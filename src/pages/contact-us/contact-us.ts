@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Http } from '@angular/http';
 import { ElementRef, ViewChild } from '@angular/core';
@@ -31,7 +31,8 @@ export class ContactUsPage {
     console.log('ionViewDidLoad ContactUsPage');
   }
 
-  submit() {
+  submit(){
+
     let m = this.commentField.nativeElement.value;
     let data = {
       "Name": "Debug app",

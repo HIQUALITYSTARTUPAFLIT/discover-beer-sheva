@@ -1,14 +1,23 @@
 <ion-header>
-	<ion-fab top left>
-		<button ion-fab menuToggle>
+  <ion-fab top left>
+    <button ion-fab menuToggle>
 			<ion-icon name="menu"></ion-icon>
 		</button>
-	</ion-fab>
+  </ion-fab>
 </ion-header>
 
 <ion-content>
-	
-	<div class="map">
-		<div id="map" #map></div>
-	</div>
+  <ion-fab center bottom>
+    <button #openButton id="openButton" ion-fab mini (click)="alertOpen()">
+			<ion-icon name="alert"></ion-icon>
+		</button>
+  </ion-fab>
+
+  <ion-footer>
+    <button #alertButton id="alertButton" ion-button full large bottom class="invisible" (touchstart)="alert_start($event)" (touchend)="alert_end($event)">Idle</button>
+  </ion-footer>
+
+  <div class="map">
+    <div id="map" #map></div>
+  </div>
 </ion-content>

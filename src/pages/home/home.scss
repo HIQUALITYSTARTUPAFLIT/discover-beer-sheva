@@ -1,57 +1,97 @@
 page-home {
-    // map style
-    #map {
-        height: 100%;
-        width: 100%;
-        top: 0;
-        left: 0;
-        position: absolute!important;
-        overflow: hidden!important;
-    }
-    .currentitem {
-        position: fixed;
-        opacity: .8;
-        top: 12rem;
-        left: 0;
-        z-index: 103;
-        width: 100%;
-        height: 50px;
-        .item-ios .item-inner {
-            background: none;
-            padding-right: 10px;
-        }
-    }
-    .hidemap {
-        visibility: hidden;
-        margin-top: -1000px;
-    }
-    ion-searchbar {
-        position: absolute;
-        opacity: .7;
-        z-index: 3;
-    }
-    .switch {
-        position: fixed;
-        bottom: 10px;
-        left: 50%;
-        transform: translate3d(-50%, -50%, 0);
-        width: 80%;
-        border-radius: 10px;
-        text-align: center;
-        z-index: 100;
-        opacity: .9;
-        .active {
-            background: #3366CC!important;
-            color: #fff;
-        }
-        .button {
-            width: 100px;
-            margin: 0;
-            padding: 0;
-        }
-    }
-}
+  // map style
+  #map {
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    position: absolute!important;
+    overflow: hidden!important;
+  }
 
-ion-fab button[ion-fab] {
-   background-color: transparent;
+  .currentitem {
+    position: fixed;
+    opacity: 0.8;
+    top: 12rem;
+    left: 0;
+    z-index: 103;
+    width: 100%;
+    height: 50px;
+
+    .item-ios .item-inner {
+      background: none;
+      padding-right: 10px;
+    }
+  }
+
+  .hidemap {
+    visibility: hidden;
+    margin-top: -1000px;
+  }
+
+  ion-searchbar {
+    position: absolute;
+    opacity: 0.7;
+    //z-index: 3;
+  }
+
+  .switch {
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    width: 80%;
+    border-radius: 10px;
+    text-align: center;
+    //z-index: 100;
+    opacity: 0.9;
+
+    .active {
+      background: #3366CC!important;
+      color: #fff;
+    }
+
+    .button {
+      width: 100px;
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  #openButton {
+    //z-index: 9995;
+  }
+
+  #alertButton {
+    //z-index: 9990;
+  }
+
+  .invisible {
+    display: none;
+  }
+
+  ion-fab button[ion-fab][menuToggle] {
+    background-color: transparent;
+  }
+
+  #alertButton {
+    .pressDown {
+      animation-name: armed;
+      animation-duration: 1s;
+      animation-iteration-count: infinite;
+      animation-direction: alternate-reverse;
+    }
+  }
+  @keyframes armed {
+    to {
+      background-color: red;
+    }
+  }
+
+  .keypad {
+    z-index: 9999;
+    #keyPadStatus{
+      text-align: center;
+    }
+  }
 }

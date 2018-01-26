@@ -10,12 +10,36 @@
     <button ion-button menuToggle>
 		<ion-icon name="menu"></ion-icon>
    </button>
-    <ion-title>alert</ion-title>
+    <ion-title>Alert</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+  <h1 ion-text>
+    Enter code to disarm
+  </h1>
 
+  <ion-row>
+    <ion-col></ion-col>
+    <ion-col #keyPadStatus id="keyPadStatus">
+
+    </ion-col>
+    <ion-col></ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-grid>
+      <ion-row *ngFor="let row of [0, 3, 6]">
+        <ion-col *ngFor="let col of [1 + row, 2 + row, 3 + row]">
+          <button ion-button full large color="light" (click)="sendKey(col)">{{col}}</button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-row>
+
+  <h1 ion-text large>
+    {{alertCountDown}} seconds left
+  </h1>
 </ion-content>
