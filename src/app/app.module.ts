@@ -18,6 +18,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { HttpModule } from '@angular/http';
+import { AppPreferences } from '@ionic-native/app-preferences';
+
 
 @NgModule({
   declarations: [
@@ -48,6 +50,7 @@ import { HttpModule } from '@angular/http';
     SplashScreen,
     Geolocation,
     HTTP,
+    AppPreferences,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

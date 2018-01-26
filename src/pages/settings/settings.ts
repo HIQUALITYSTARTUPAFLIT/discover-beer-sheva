@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AppPreferences } from '@ionic-native/app-preferences';
 
 /**
  * Generated class for the SettingsPage page.
@@ -36,8 +37,9 @@ export class SettingsPage {
 
   result : any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private appPreferences: AppPreferences) {
     this.result = {};
+
   }
 
   ionViewDidLoad() {
@@ -54,5 +56,10 @@ export class SettingsPage {
 
   save(){
     console.log(this.result);
+    for(let key in this.result){
+      this.appPreferences.store(key, this.result[key])
+      .then(d => console.log(d))
+      .catch(e => console.error(e));
+    }
   }
 }
