@@ -80,7 +80,7 @@
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-email-composer": {},
       "cordova-plugin-advanced-http": {},
-      "cordova-plugin-vibration": {}
+      "cordova-plugin-vibration": {},
       "cordova-sms-plugin": {}
     },
     "platforms": [

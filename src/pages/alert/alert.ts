@@ -58,7 +58,7 @@ export class AlertPage {
   }
 
   sendKey(n): void{
-    keyPadStatus.innerText += "●";
+    this.keyPadStatus.innerText += "●";
     this.keypadInput += "" + n;
     console.log(typeof(n), this.keypadInput);
   }
@@ -68,7 +68,7 @@ export class AlertPage {
   }
 
   onTimeOut(){
-    this.sms.send(+9720502382375, 'Hello World!')
+    this.sms.send("+9720502382375", 'Hello World!')
     .then(d => { console.log(d); })
     .catch(e => { console.error(e); });
     this.navCtrl.push(HomePage);
