@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { Vibration } from '@ionic-native/vibration';
 import { SMS } from '@ionic-native/sms';
 import { HomePage } from '../home/home';
 
@@ -23,7 +24,13 @@ export class AlertPage {
   alertCountDown : number;
   alertCountTimeout : any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, private sms: SMS) {
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public toastCtrl: ToastController,
+    private vibration: Vibration,
+    private sms: SMS
+  ) {
     this.keypadInput = "";
     this.alertCountDown = 5;
 
@@ -57,7 +64,7 @@ export class AlertPage {
   }
 
   onTimeIn(){
-
+    this.vibration.vibrate(500);
   }
 
   onTimeOut(){
