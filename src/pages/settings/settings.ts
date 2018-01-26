@@ -39,7 +39,6 @@ export class SettingsPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private appPreferences: AppPreferences) {
     this.result = {};
-
   }
 
   ionViewDidLoad() {

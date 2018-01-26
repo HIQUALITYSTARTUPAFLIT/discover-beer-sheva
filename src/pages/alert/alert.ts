@@ -58,7 +58,7 @@ export class AlertPage {
   }
 
   sendKey(n): void{
-    this.keyPadStatus.innerText += "●";
+    //this.keyPadStatus.innerText += "●";
     this.keypadInput += "" + n;
     console.log(typeof(n), this.keypadInput);
   }
