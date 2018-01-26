@@ -19,6 +19,8 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { HttpModule } from '@angular/http';
 
+import { SMS } from '@ionic-native/sms';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -48,6 +50,7 @@ import { HttpModule } from '@angular/http';
     SplashScreen,
     Geolocation,
     HTTP,
+    SMS,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
