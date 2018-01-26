@@ -3,7 +3,6 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { BrowserModule } from '@angular/platform-browser';
 import { HTTP } from '@ionic-native/http';
 
-
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { AboutPage } from '../pages/about/about';
@@ -20,6 +19,9 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { HttpModule } from '@angular/http';
 import { AppPreferences } from '@ionic-native/app-preferences';
 
+
+import { Vibration } from '@ionic-native/vibration';
+import { SMS } from '@ionic-native/sms';
 
 @NgModule({
   declarations: [
@@ -50,6 +52,8 @@ import { AppPreferences } from '@ionic-native/app-preferences';
     SplashScreen,
     Geolocation,
     HTTP,
+    Vibration,
+    SMS,
     AppPreferences,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
