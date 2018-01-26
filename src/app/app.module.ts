@@ -19,6 +19,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { HttpModule } from '@angular/http';
 
 import { Vibration } from '@ionic-native/vibration';
+import { SMS } from '@ionic-native/sms';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { Vibration } from '@ionic-native/vibration';
     Geolocation,
     HTTP,
     Vibration,
+    SMS,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

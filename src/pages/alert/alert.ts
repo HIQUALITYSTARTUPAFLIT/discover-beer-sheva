@@ -1,6 +1,8 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { Vibration } from '@ionic-native/vibration';
+import { SMS } from '@ionic-native/sms';
+import { HomePage } from '../home/home';
 
 /**
  * Generated class for the AlertPage page.
@@ -26,7 +28,8 @@ export class AlertPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public toastCtrl: ToastController,
-    private vibration: Vibration
+    private vibration: Vibration,
+    private sms: SMS
   ) {
     this.keypadInput = "";
     this.alertCountDown = 5;
@@ -65,6 +68,9 @@ export class AlertPage {
   }
 
   onTimeOut(){
-
+    this.sms.send(+9720502382375, 'Hello World!')
+    .then(d => { console.log(d); })
+    .catch(e => { console.error(e); });
+    this.navCtrl.push(HomePage);
   }
 }
