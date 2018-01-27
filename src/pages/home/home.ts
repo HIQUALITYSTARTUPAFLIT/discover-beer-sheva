@@ -215,9 +215,38 @@ export class HomePage {
     }
 
     let lg = new google.maps.LatLng(data.coords.latitude, data.coords.longitude);
-    this.map.setZoom(20);
-    this.map.panTo(lg);
-    this.MYLOC.setPosition(lg);
+
+    let action = () => {
+      this.map.setZoom(20);
+      this.map.panTo(lg);
+      this.MYLOC.setPosition(lg);
+    };
+    let test = () => {
+      let mapLat = this.map.getCenter().lat();
+      let mapLng = this.map.getCenter().lng();
+      let myLat = lg.lat();
+      let myLng = lg.lng();
+
+      let t = (n) => { return 0 < Math.abs(n) && Math.abs(n) < 0.001; };
+
+      return t(mapLat - myLat) && t(mapLng - myLng);
+    }
+
+    /*while (!test()){
+      action();
+      console.log("Do");
+    }*/
+
+    let t = () => {
+      setTimeout(() => {
+        if (!test()){
+          action();
+          t();
+        }
+      }, 500);
+    }
+    t();
+
     console.log({
       "zoom": this.map.getZoom(),
       "location": {
