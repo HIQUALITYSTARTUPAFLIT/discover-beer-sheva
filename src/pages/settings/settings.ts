@@ -18,6 +18,10 @@ export class SettingsPage {
 
   template = [
     {
+      "title": "Passcode",
+      "type": "number"
+    }
+    {
       "title": "Keypad Timeout",
       "type": "number"
     },

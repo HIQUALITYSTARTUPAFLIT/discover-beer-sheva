@@ -4,6 +4,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { Http } from '@angular/http';
 import * as utmObj from 'utm-latlng';
 import { AlertPage } from '../alert/alert';
+import { OfflinePage } from '../offline/offline';
 //var utmObj = require('utm-latlng');
 
 declare var google: any;
@@ -13,9 +14,9 @@ declare var google: any;
   templateUrl: 'home.html',
 })
 export class HomePage {
-  @ViewChild('map') mapElement: ElementRef;
-  @ViewChild('alertButton') alertButton : ElementRef;
-  @ViewChild('openButton') openButton : ElementRef;
+  @ViewChild('map') mapElement: any;
+  @ViewChild('alertButton') alertButton : any;
+  @ViewChild('openButton') openButton : any;
   addressElement: HTMLInputElement = null;
 
   map: any;
@@ -40,8 +41,13 @@ export class HomePage {
   ) {
     this.keypadInput = "";
     this.platform.ready().then(() => {
-      this.loadMaps();
-      this.loadMarkers();
+      if (google){
+        this.loadMaps();
+        this.loadMarkers();
+      }
+      else{
+        this.nav.push(OfflinePage);
+      }
     });
   }
 
@@ -288,8 +294,10 @@ placeMarker(options){
 
   alertOpen(event){
     console.log("Alert open");
-    this.alertButton.classList.toggle("invisible");
-    this.openButton.classList.toggle("invisible");
+    //this.alertButton.classList.toggle("invisible");
+    //this.openButton.classList.toggle("invisible");
+    this.alertButton.setElementClass("invisible", false);
+    this.openButton.setElementClass("invisible", true);
   }
 
   alert_start(event){

@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angu
 import { Vibration } from '@ionic-native/vibration';
 import { SMS } from '@ionic-native/sms';
 import { HomePage } from '../home/home';
+import { AppPreferences } from '@ionic-native/app-preferences';
 
 /**
  * Generated class for the AlertPage page.
@@ -24,13 +25,30 @@ export class AlertPage {
   alertCountDown : number;
   alertCountTimeout : any;
 
+  settings : any;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public toastCtrl: ToastController,
     private vibration: Vibration,
-    private sms: SMS
+    private sms: SMS,
+    private appPreferences: AppPreferences
   ) {
+    this.settings ={};
+    let ps = [];
+    let loadOne = (name, spot) => {
+      ps.push(this.appPreferences.fetch(name).then(d => { this.settings[spot] = d; }));
+    }
+
+    loadOne("Passcode", "pass");
+    loadOne("Keypad Timeout", "timeout");
+    loadOne("Emergency Contact Number", "phone");
+    loadOne("Custom message", "message");
+    loadOne("Send location", "sendLocation");
+
+    Promise.all(ps).catch(d => { console.error(d); });
+
     this.keypadInput = "";
     this.alertCountDown = 5;
 
