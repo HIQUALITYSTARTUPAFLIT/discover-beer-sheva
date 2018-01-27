@@ -31,7 +31,7 @@ export class MyApp {
     this.pages = [
       { title: '', component: null },
       { title: 'Home', component: HomePage },
-      { title: 'Alert', component: AlertPage },
+      //{ title: 'Alert', component: AlertPage },
       { title: 'About', component: AboutPage },
       { title: 'Contact Us', component: ContactUsPage},
       { title: 'Settings', component: SettingsPage }
