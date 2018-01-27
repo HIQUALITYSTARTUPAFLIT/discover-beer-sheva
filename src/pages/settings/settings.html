@@ -19,9 +19,10 @@
 <ion-content padding>
   <form (ngSubmit)="save()">
     <ion-item *ngFor="let item of template">
-      <ion-label>{{item.title}}</ion-label>
+      <ion-label floating color="primary" *ngIf="useInputTag(item.type)">{{item.title}}</ion-label>
+      <ion-label color="primary" *ngIf="useCheckBox(item.type)">{{item.title}}</ion-label>
       <ion-input *ngIf="useInputTag(item.type)" type={{item.type}} [(ngModel)]="result[item.title]" name={{item.title}} clearInput></ion-input>
-      <ion-checkbox *ngIf="useCheckBox(item.type)"></ion-checkbox>
+      <ion-toggle *ngIf="useCheckBox(item.type)"></ion-toggle>
     </ion-item>
 
     <button ion-button type="submit" block>Save</button>

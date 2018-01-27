@@ -50,11 +50,13 @@ export class SettingsPage {
   }
 
   useInputTag(t){
-    return ["text", "password", "email", "number", "search", "tel", "url"].indexOf(t) > 0;
+    let r = ["text", "password", "email", "number", "search", "tel", "url"].indexOf(t) > -1;
+    return r
   }
 
   useCheckBox(t){
-    return ["bool"].indexOf(t) > 0;
+    let r = ["bool"].indexOf(t) > -1;
+    return r;
   }
 
   save(){
