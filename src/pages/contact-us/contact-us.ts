@@ -1,7 +1,6 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Http } from '@angular/http';
-import { ElementRef, ViewChild } from '@angular/core';
 
 /**
  * Generated class for the ContactUsPage page.

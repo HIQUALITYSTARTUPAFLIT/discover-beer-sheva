@@ -288,8 +288,8 @@ placeMarker(options){
 
   alertOpen(event){
     console.log("Alert open");
-    alertButton.classList.toggle("invisible");
-    openButton.classList.toggle("invisible");
+    this.alertButton.classList.toggle("invisible");
+    this.openButton.classList.toggle("invisible");
   }
 
   alert_start(event){
