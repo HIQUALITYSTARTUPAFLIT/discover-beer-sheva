@@ -20,7 +20,7 @@ export class SettingsPage {
     {
       "title": "Passcode",
       "type": "number"
-    }
+    },
     {
       "title": "Keypad Timeout",
       "type": "number"

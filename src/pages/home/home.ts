@@ -41,13 +41,8 @@ export class HomePage {
   ) {
     this.keypadInput = "";
     this.platform.ready().then(() => {
-      if (google){
-        this.loadMaps();
-        this.loadMarkers();
-      }
-      else{
-        this.nav.push(OfflinePage);
-      }
+      this.loadMaps();
+      this.loadMarkers();
     });
   }
 
@@ -90,7 +85,8 @@ export class HomePage {
         data.push(this.getCoordinates(heatmapData[key]));
       }
       var heatmap = new google.maps.visualization.HeatmapLayer({
-        data: data
+        data: data,
+        gradient: ["rgba(0,0,0,0)", "rgba(253, 251, 149, 0.9)"]
       });
       console.log({"lat": data[0].lat(), "long": data[0].lng()});
       heatmap.setMap(this.map);
@@ -115,7 +111,7 @@ export class HomePage {
   }
 
   loadMaps() {
-    if (!!google) {
+    if (google) {
       this.initializeMap();
     } else {
       this.errorAlert('Error', 'Something went wrong with the Internet Connection. Please check your Internet.')
