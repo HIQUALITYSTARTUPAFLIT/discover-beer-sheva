@@ -188,12 +188,16 @@ export class HomePage {
         console.error(e);
       }
 
+      var icon = {
+        url: '../../assets/icon/myLocation.png', // url
+        scaledSize: new google.maps.Size(32, 32), // scaled size
+        origin: new google.maps.Point(0, 0), // origin
+        anchor: new google.maps.Point(0, 0) // anchor
+      };
+
       this.MYLOC = new google.maps.Marker({
         clickable: false,
-        icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
-          new google.maps.Size(22, 22),
-          new google.maps.Point(0, 18),
-          new google.maps.Point(11, 11)),
+        icon: icon,
         shadow: null,
         zIndex: 999,
         map: this.map// your google.maps.Map object
@@ -213,11 +217,33 @@ export class HomePage {
     }
 
     let lg = new google.maps.LatLng(data.coords.latitude, data.coords.longitude);
+    const beerSheva = new google.maps.LatLng(31.2530, 34.7915);
 
     let action = () => {
       this.map.setZoom(20);
       this.map.panTo(lg);
       this.MYLOC.setPosition(lg);
+
+      function deg2rad(deg) {
+        return deg * (Math.PI/180)
+      }
+
+      function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+        var R = 6371; // Radius of the earth in km
+        var dLat = deg2rad(lat2-lat1);  // deg2rad below
+        var dLon = deg2rad(lon2-lon1);
+        var a =
+          Math.sin(dLat/2) * Math.sin(dLat/2) +
+          Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+          Math.sin(dLon/2) * Math.sin(dLon/2)
+          ;
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        var d = R * c; // Distance in km
+        return d;
+      }
+      if (getDistanceFromLatLonInKm(lg.lat(), lg.lng(), beerSheva.lat(), beerSheva.lng()) > 5){
+        this.errorAlert("Error", "This app was only meant to work in Be'er Sheva, some features may not apply");
+      }
     };
     let test = () => {
       let mapLat = this.map.getCenter().lat();
@@ -229,11 +255,6 @@ export class HomePage {
 
       return t(mapLat - myLat) && t(mapLng - myLng);
     }
-
-    /*while (!test()){
-      action();
-      console.log("Do");
-    }*/
 
     let t = () => {
       setTimeout(() => {
