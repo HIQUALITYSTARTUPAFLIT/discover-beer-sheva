@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { HomePage } from '../home/home'
 
 /**
  * Generated class for the CreatePasscodePage page.
@@ -29,10 +28,13 @@ export class CreatePasscodePage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CreatePasscodePage');
+<<<<<<< HEAD
   }
 
   goHome() {
     this.navCtrl.push(HomePage);
+=======
+>>>>>>> parent of e4c7b8b... go home feature
   }
   logKey(n) {
     if (this.firstPasscode == "") {

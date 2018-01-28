@@ -18,7 +18,7 @@ import { CreatePasscodePage } from '../pages/create-passcode/create-passcode';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage = CreatePasscodePage;
+  rootPage = HomePage;
   pages: Array<{title: string, component: any}>;
 
   constructor(platform: Platform, public SplashScreen: SplashScreen, public StatusBar: StatusBar, public menu: MenuController) {
