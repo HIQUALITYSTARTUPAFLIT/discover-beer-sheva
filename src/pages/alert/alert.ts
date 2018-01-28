@@ -37,30 +37,32 @@ export class AlertPage {
   ) {
     this.settings ={};
     let ps = [];
-    let loadOne = (name, spot) => {
-      ps.push(this.appPreferences.fetch(name).then(d => { this.settings[spot] = d; }));
+    let loadOne = (name, spot, def) => {
+      let t = this.appPreferences.fetch(name).then(d => { this.settings[spot] = d || def; });
+      ps.push(t);
+      return t;
     }
 
-    loadOne("Passcode", "pass");
-    loadOne("Keypad Timeout", "timeout");
-    loadOne("Emergency Contact Number", "phone");
-    loadOne("Custom message", "message");
-    loadOne("Send location", "sendLocation");
+    loadOne("Passcode", "pass", "1234");
+    loadOne("Keypad Timeout", "timeout", "5");
+    loadOne("Emergency Contact Number", "phone", "");
+    loadOne("Custom message", "message", "Help me");
+    loadOne("Send location", "sendLocation", true);
 
-    Promise.all(ps).catch(d => { console.error(d); });
+    Promise.all(ps).then(d => {
+      this.alertCountDown = this.settings.timeout;
+      this.alertCountTimeout = setInterval(() => {
+        if (--this.alertCountDown >= 1){
+          this.onTimeIn();
+        }
+        else{
+          clearInterval(this.alertCountTimeout);
+          this.onTimeOut();
+        }
+      }, 1000);
+    }).catch(d => { console.error(d); });
 
     this.keypadInput = "";
-    this.alertCountDown = 5;
-
-    this.alertCountTimeout = setInterval(() => {
-      if (--this.alertCountDown >= 1){
-        this.onTimeIn();
-      }
-      else{
-        clearInterval(this.alertCountTimeout);
-        this.onTimeOut();
-      }
-    }, 1000);
   }
 
   ionViewDidLoad() {
@@ -79,6 +81,11 @@ export class AlertPage {
     //this.keyPadStatus.innerText += "●";
     this.keypadInput += "" + n;
     console.log(typeof(n), this.keypadInput);
+
+    if (this.keypadInput == this.settings.pass){
+      clearInterval(this.alertCountTimeout);
+      this.navCtrl.push(HomePage);
+    }
   }
 
   onTimeIn(){
