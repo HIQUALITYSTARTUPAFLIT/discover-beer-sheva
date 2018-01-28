@@ -9,6 +9,7 @@ import { AboutPage } from '../pages/about/about';
 import { AlertPage } from '../pages/alert/alert';
 import { SettingsPage } from '../pages/settings/settings';
 import { ContactUsPage } from '../pages/contact-us/contact-us';
+import { CreatePasscodePage } from '../pages/create-passcode/create-passcode';
 
 import { IonicStorageModule } from '@ionic/storage';
 
@@ -30,7 +31,8 @@ import { SMS } from '@ionic-native/sms';
     AlertPage,
     AboutPage,
     SettingsPage,
-    ContactUsPage
+    ContactUsPage,
+    CreatePasscodePage
   ],
   imports: [
     BrowserModule,
@@ -45,7 +47,8 @@ import { SMS } from '@ionic-native/sms';
     AlertPage,
     AboutPage,
     SettingsPage,
-    ContactUsPage
+    ContactUsPage,
+    CreatePasscodePage
   ],
   providers: [
     StatusBar,
