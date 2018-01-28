@@ -5,6 +5,7 @@ import { SMS } from '@ionic-native/sms';
 import { HomePage } from '../home/home';
 import { AppPreferences } from '@ionic-native/app-preferences';
 import { SettingsPage } from '../settings/settings';
+import { Geolocation } from '@ionic-native/geolocation';
 
 /**
  * Generated class for the AlertPage page.
@@ -35,7 +36,8 @@ export class AlertPage {
     private vibration: Vibration,
     private sms: SMS,
     private appPreferences: AppPreferences,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    public geolocation: Geolocation
   ) {
     this.settings = {};
     let ps = [];
@@ -54,7 +56,7 @@ export class AlertPage {
     Promise.all(ps).then(d => {
       let allowContinue = true;
       for (let key in this.settings){
-        if (!this.settings[key]){
+        if (this.settings[key] === undefined){
           this.switchToSettings("You seem to have not filled out some settings. Would you like to do that now to enable this feature?");
           allowContinue = false;
           return;
@@ -108,9 +110,23 @@ export class AlertPage {
   }
 
   onTimeOut() {
-    this.sms.send(this.settings.phone, 'Hello World!')
-      .then(d => { console.log(d); })
-      .catch(e => { console.error(e); });
+    let send = (m) => {
+      this.sms.send(this.settings.phone, m)
+        .then(d => { console.log(d); })
+        .catch(e => {
+          this.presentAlert("Text error", "Unable to send text");
+          console.error(e);
+         });
+    };
+
+    send('**SOS**\nYou have received this message because I am currently in destress\n\n\"' + this.settings.message + "\"")
+
+    if(this.settings.sendLocation){
+      this.geolocation.getCurrentPosition().then(data => {
+        send(`Here's my current location\n\nhttp://www.google.com/maps/place/${data.coords.latitude},${data.coords.longitude}`);
+      })
+    }
+
     this.presentAlert("Alert", "Emergency text sent to " + this.settings.phone);
     this.navCtrl.push(HomePage);
   }

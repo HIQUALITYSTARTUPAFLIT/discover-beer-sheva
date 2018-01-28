@@ -242,7 +242,22 @@ export class HomePage {
         return d;
       }
       if (getDistanceFromLatLonInKm(lg.lat(), lg.lng(), beerSheva.lat(), beerSheva.lng()) > 5){
-        this.errorAlert("Error", "This app was only meant to work in Be'er Sheva, some features may not apply");
+        //this.errorAlert("Error", "");
+        this.alertCtrl.create({
+          "title" : "Out of range",
+          "subTitle" : "This app was only meant to work in Be'er Sheva, some features may not apply",
+          "buttons" : [
+            {
+              text: "Ok"
+            },
+            {
+              text : "Close app",
+              handler : () => {
+                this.platform.exitApp();
+              }
+            }
+          ]
+        }).present();
       }
     };
     let test = () => {
