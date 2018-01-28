@@ -12,17 +12,17 @@
   	</button>
     <ion-title>Settings</ion-title>
   </ion-navbar>
-
 </ion-header>
-
 
 <ion-content padding>
   <form (ngSubmit)="save()">
-    <ion-item *ngFor="let item of template">
-      <ion-label floating color="primary" *ngIf="useInputTag(item.type)">{{item.title}}</ion-label>
-      <ion-label color="primary" *ngIf="useCheckBox(item.type)">{{item.title}}</ion-label>
-      <ion-input *ngIf="useInputTag(item.type)" type={{item.type}} [(ngModel)]="result[item.title]" name={{item.title}} clearInput value={{result.def}}></ion-input>
-      <ion-toggle *ngIf="useCheckBox(item.type)"></ion-toggle>
+    <ion-item *ngFor="let i of getRange()">
+      <ion-label floating color="primary" *ngIf="useInputTag(template[i].type)">{{template[i].title}}</ion-label>
+      <ion-label color="primary" *ngIf="useCheckBox(template[i].type)">{{template[i].title}}</ion-label>
+
+      <ion-input *ngIf="useInputTag(template[i].type)" type={{template[i].type}} [(ngModel)]="result[template[i].title]"
+      name={{template[i].title}} clearInput value={{this.getDef(i)}}></ion-input>
+      <ion-toggle *ngIf="useCheckBox(template[i].type)" ngModel="result[template[i].title]" [ngModelOptions]="{standalone: true}"></ion-toggle>
     </ion-item>
 
     <button ion-button type="submit" block>Save</button>

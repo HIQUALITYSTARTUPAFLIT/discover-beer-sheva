@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { AppPreferences } from '@ionic-native/app-preferences';
 
 /**
@@ -46,7 +46,8 @@ export class SettingsPage {
 
   result: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private appPreferences: AppPreferences) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private appPreferences: AppPreferences,
+  public toastCtrl: ToastController) {
     this.result = {};
 
     let ps = [];
@@ -55,7 +56,7 @@ export class SettingsPage {
         //this.template[spot].default = d;
         for (var i = 0; i < this.template.length; i++) {
           if (this.template[i].title == name) {
-            this.template[i].def = d || this.template[i].def;
+            this.result[this.template[i].title] = d || this.template[i].def;
           }
         }
       });
@@ -69,7 +70,7 @@ export class SettingsPage {
     loadOne("Custom message");
     loadOne("Send location");
 
-    Promise.all(ps).catch(e => console.log(e));
+    Promise.all(ps).then(d => this.showToast("Loaded previous settings")).catch(e => console.log(e));
   }
 
   ionViewDidLoad() {
@@ -86,6 +87,15 @@ export class SettingsPage {
     return r;
   }
 
+  getRange(){
+    return Array.from(Array(this.template.length).keys())
+  }
+
+  getDef(i){
+    //console.log("Get " + i);
+    return this.template[i].def;
+  }
+
   save() {
     console.log(this.result);
     for (let key in this.result) {
@@ -93,5 +103,14 @@ export class SettingsPage {
         .then(d => console.log(d))
         .catch(e => console.error(e));
     }
+    this.showToast("Saved")
+  }
+
+  showToast(message) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000
+    });
+    toast.present();
   }
 }

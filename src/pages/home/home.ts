@@ -358,4 +358,5 @@ placeMarker(options){
     //this.keyPad.nativeElement.classList.toggle("invisible");
     this.nav.push(AlertPage);
   }
+
 }
