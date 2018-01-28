@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, AlertController } from 'ionic-angular';
 import { Vibration } from '@ionic-native/vibration';
 import { SMS } from '@ionic-native/sms';
 import { HomePage } from '../home/home';
@@ -21,11 +21,11 @@ export class AlertPage {
   @ViewChild('keyPadStatus') keyPadStatus: ElementRef;
   @ViewChild('keyPad') keyPad: ElementRef;
 
-  keypadInput : string;
-  alertCountDown : number;
-  alertCountTimeout : any;
+  keypadInput: string;
+  alertCountDown: number;
+  alertCountTimeout: any;
 
-  settings : any;
+  settings: any;
 
   constructor(
     public navCtrl: NavController,
@@ -33,9 +33,10 @@ export class AlertPage {
     public toastCtrl: ToastController,
     private vibration: Vibration,
     private sms: SMS,
-    private appPreferences: AppPreferences
+    private appPreferences: AppPreferences,
+    private alertCtrl: AlertController
   ) {
-    this.settings ={};
+    this.settings = {};
     let ps = [];
     let loadOne = (name, spot, def) => {
       let t = this.appPreferences.fetch(name).then(d => { this.settings[spot] = d || def; });
@@ -52,10 +53,10 @@ export class AlertPage {
     Promise.all(ps).then(d => {
       this.alertCountDown = this.settings.timeout;
       this.alertCountTimeout = setInterval(() => {
-        if (--this.alertCountDown >= 1){
+        if (--this.alertCountDown >= 1) {
           this.onTimeIn();
         }
-        else{
+        else {
           clearInterval(this.alertCountTimeout);
           this.onTimeOut();
         }
@@ -77,25 +78,36 @@ export class AlertPage {
     toast.present();
   }
 
-  sendKey(n): void{
+  sendKey(n): void {
     //this.keyPadStatus.innerText += "●";
     this.keypadInput += "" + n;
-    console.log(typeof(n), this.keypadInput);
+    console.log(typeof (n), this.keypadInput);
 
-    if (this.keypadInput == this.settings.pass){
+    if (this.keypadInput == this.settings.pass) {
       clearInterval(this.alertCountTimeout);
+      this.presentAlert("Alert", "Disarmed text");
       this.navCtrl.push(HomePage);
     }
   }
 
-  onTimeIn(){
+  onTimeIn() {
     this.vibration.vibrate(500);
   }
 
-  onTimeOut(){
-    this.sms.send("+9720502382375", 'Hello World!')
-    .then(d => { console.log(d); })
-    .catch(e => { console.error(e); });
+  onTimeOut() {
+    this.sms.send(this.settings.phone, 'Hello World!')
+      .then(d => { console.log(d); })
+      .catch(e => { console.error(e); });
+    this.presentAlert("Alert", "Emergency text sent to " + this.settings.phone);
     this.navCtrl.push(HomePage);
+  }
+
+  presentAlert(title, body) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: body,
+      buttons: ['Dismiss']
+    });
+    alert.present();
   }
 }
