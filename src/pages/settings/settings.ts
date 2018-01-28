@@ -20,30 +20,31 @@ export class SettingsPage {
     {
       "title": "Passcode",
       "type": "number",
-      "default": "1234"
+      "def": "1234"
     },
     {
       "title": "Keypad Timeout",
       "type": "number",
-      "default": "5"
+      "def": "5"
     },
     {
       "title": "Emergency Contact Number",
-      "type": "tel"
+      "type": "tel",
+      "def": ""
     },
     {
       "title": "Custom message",
       "type": "text",
-      "default": "Help me"
+      "def": "Help me"
     },
     {
       "title": "Send location",
       "type": "bool",
-      "default": true
+      "def": true
     }
   ];
 
-  result : any;
+  result: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private appPreferences: AppPreferences) {
     this.result = {};
@@ -51,14 +52,13 @@ export class SettingsPage {
     let ps = [];
     let loadOne = (name) => {
       let t = this.appPreferences.fetch(name).then(d => {
-         //this.template[spot].default = d;
-         for (var i = 0; i < this.template.length; i++){
+        //this.template[spot].default = d;
+        for (var i = 0; i < this.template.length; i++) {
           if (this.template[i].title == name) {
-            this.template[i].default = d || this.template[i].default;
+            this.template[i].def = d || this.template[i].def;
           }
-         }
-       }
-       });
+        }
+      });
       ps.push(t);
       return t;
     };
@@ -76,22 +76,22 @@ export class SettingsPage {
     console.log('ionViewDidLoad SettingsPage');
   }
 
-  useInputTag(t){
+  useInputTag(t) {
     let r = ["text", "password", "email", "number", "search", "tel", "url"].indexOf(t) > -1;
     return r
   }
 
-  useCheckBox(t){
+  useCheckBox(t) {
     let r = ["bool"].indexOf(t) > -1;
     return r;
   }
 
-  save(){
+  save() {
     console.log(this.result);
-    for(let key in this.result){
+    for (let key in this.result) {
       this.appPreferences.store(key, this.result[key])
-      .then(d => console.log(d))
-      .catch(e => console.error(e));
+        .then(d => console.log(d))
+        .catch(e => console.error(e));
     }
   }
 }
