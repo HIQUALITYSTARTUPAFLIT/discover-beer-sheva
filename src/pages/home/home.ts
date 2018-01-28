@@ -47,10 +47,7 @@ export class HomePage {
   }
 
   getCoordinates(x) {
-    const utm = new utmObj();
-
-    let temp = utm.convertUtmToLatLng(x.geometry.coordinates[0], x.geometry.coordinates[1], 36, 'R');
-    return new google.maps.LatLng(temp.lat, temp.lng);
+    return new google.maps.LatLng(x.geometry.coordinates[1], x.geometry.coordinates[0]);
   }
 
   loadMarkers() {
@@ -78,7 +75,7 @@ export class HomePage {
       });
     };
 
-    load("street_light").then(heatmapData => {
+    load("streetlight_epsg4326").then(heatmapData => {
       this.showToast("Loaded street lights");
       var data = [];
       for (var key in heatmapData){
