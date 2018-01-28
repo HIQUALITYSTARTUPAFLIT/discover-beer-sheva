@@ -86,7 +86,8 @@ export class HomePage {
       }
       var heatmap = new google.maps.visualization.HeatmapLayer({
         data: data,
-        gradient: ["rgba(0,0,0,0)", "rgba(253, 251, 149, 0.9)"]
+        gradient: ["rgba(0,0,0,0)", "rgba(253, 251, 149, 0.9)"],
+        maxIntensity: 1
       });
       console.log({"lat": data[0].lat(), "long": data[0].lng()});
       heatmap.setMap(this.map);

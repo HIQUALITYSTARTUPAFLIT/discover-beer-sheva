@@ -30,7 +30,11 @@ import { SMS } from '@ionic-native/sms';
     AlertPage,
     AboutPage,
     SettingsPage,
+<<<<<<< Updated upstream
     ContactUsPage,
+=======
+    ContactUsPage
+>>>>>>> Stashed changes
   ],
   imports: [
     BrowserModule,
@@ -45,7 +49,11 @@ import { SMS } from '@ionic-native/sms';
     AlertPage,
     AboutPage,
     SettingsPage,
+<<<<<<< Updated upstream
     ContactUsPage,
+=======
+    ContactUsPage
+>>>>>>> Stashed changes
   ],
   providers: [
     StatusBar,
