@@ -16,29 +16,50 @@ import { HomePage } from '../home/home'
 })
 
 export class CreatePasscodePage {
-  keypadInput : string;
+  keypadInput: string;
+  firstPasscode: string;
+  secondPasscode : string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
 
-  this.keypadInput = "";
-}
+    this.keypadInput = "";
+    this.firstPasscode = "";
+    this.secondPasscode = "";
+  }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CreatePasscodePage');
   }
 
-  goHome(){
+  goHome() {
     this.navCtrl.push(HomePage);
   }
-  logKey(n){
-    this.keypadInput += "" + n;
-    console.log(this.keypadInput);
+  logKey(n) {
+    if (this.firstPasscode == "") {
+      this.keypadInput += "" + n;
 
-    if(this.keypadInput.length == 4){
-      console.log("Passcode Completed");
-      console.log(this.keypadInput)
-      this.keypadInput = "";
+      if (this.keypadInput.length == 4) {
+        console.log("Passcode Completed");
+        this.firstPasscode = this.keypadInput;
+        this.keypadInput = "";
+      }
+    } else {
+      this.keypadInput += "" + n;
+      
+      if (this.keypadInput == 4){
+        console.log(this.keypadInput)
+        this.secondPasscode = this.keypadInput;
+        this.keypadInput = "";
+
+        if(this.firstPasscode == this.secondPasscode){
+          console.log("Passcodes match")
+        } else {
+          console.log("Passcodes do not match")
+        }
+      }
     }
+
+
 
   }
 }
