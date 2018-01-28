@@ -306,7 +306,6 @@ export class HomePage {
 
     this.map.fitBounds(bounds);
   }
-
   resizeMap() {
     setTimeout(() => {
       google.maps.event.trigger(this.map, 'resize');

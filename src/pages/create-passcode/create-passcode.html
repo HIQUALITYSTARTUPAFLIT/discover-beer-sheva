@@ -1,0 +1,12 @@
+<ion-content>
+  <h1 id="header">Enter a passcode</h1>
+  <ion-row>
+    <ion-grid>
+      <ion-row *ngFor="let row of [0, 3, 6]">
+        <ion-col *ngFor="let col of [1 + row, 2 + row, 3 + row]">
+          <button ion-button full large color="light" (click)="logKey(col)">{{col}}</button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-row>
+</ion-content>
