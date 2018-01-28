@@ -21,7 +21,7 @@
     <ion-item *ngFor="let item of template">
       <ion-label floating color="primary" *ngIf="useInputTag(item.type)">{{item.title}}</ion-label>
       <ion-label color="primary" *ngIf="useCheckBox(item.type)">{{item.title}}</ion-label>
-      <ion-input *ngIf="useInputTag(item.type)" type={{item.type}} [(ngModel)]="result[item.title]" name={{item.title}} clearInput></ion-input>
+      <ion-input *ngIf="useInputTag(item.type)" type={{item.type}} [(ngModel)]="result[item.title]" name={{item.title}} clearInput value={{result.default}}></ion-input>
       <ion-toggle *ngIf="useCheckBox(item.type)"></ion-toggle>
     </ion-item>
 

@@ -19,11 +19,13 @@ export class SettingsPage {
   template = [
     {
       "title": "Passcode",
-      "type": "number"
+      "type": "number",
+      "default": "1234"
     },
     {
       "title": "Keypad Timeout",
-      "type": "number"
+      "type": "number",
+      "default": "5"
     },
     {
       "title": "Emergency Contact Number",
@@ -31,11 +33,13 @@ export class SettingsPage {
     },
     {
       "title": "Custom message",
-      "type": "text"
+      "type": "text",
+      "default": "Help me"
     },
     {
       "title": "Send location",
-      "type": "bool"
+      "type": "bool",
+      "default": true
     }
   ];
 
@@ -43,6 +47,29 @@ export class SettingsPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private appPreferences: AppPreferences) {
     this.result = {};
+
+    let ps = [];
+    let loadOne = (name) => {
+      let t = this.appPreferences.fetch(name).then(d => {
+         //this.template[spot].default = d;
+         for (var i = 0; i < this.template.length; i++){
+          if (this.template[i].title == name) {
+            this.template[i].default = d || this.template[i].default;
+          }
+         }
+       }
+       });
+      ps.push(t);
+      return t;
+    };
+
+    loadOne("Passcode");
+    loadOne("Keypad Timeout");
+    loadOne("Emergency Contact Number");
+    loadOne("Custom message");
+    loadOne("Send location");
+
+    Promise.all(ps).catch(e => console.log(e));
   }
 
   ionViewDidLoad() {
