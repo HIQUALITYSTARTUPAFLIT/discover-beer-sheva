@@ -14,18 +14,24 @@ import { HomePage } from '../home/home'
   selector: 'page-create-passcode',
   templateUrl: 'create-passcode.html',
 })
+
 export class CreatePasscodePage {
+  keypadInput : string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+
+  this.keypadInput = "2";
+  console.log(this.keypadInput);
+}
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CreatePasscodePage');
-    this.goHome();
   }
 
   goHome(){
     this.navCtrl.push(HomePage);
   }
+  logKey(n){
 
+  }
 }

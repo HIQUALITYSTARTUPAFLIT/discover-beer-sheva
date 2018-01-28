@@ -1,18 +1,9 @@
-<!--
-  Generated template for the CreatePasscodePage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-<ion-header>
-
-  <ion-navbar>
-    <ion-title>createPasscode</ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
-<ion-content padding>
-
-</ion-content>
+<ion-row>
+  <ion-grid>
+    <ion-row *ngFor="let row of [0, 3, 6]">
+      <ion-col *ngFor="let col of [1 + row, 2 + row, 3 + row]">
+        <button ion-button full large color="light" (click)="logKey(col)">{{col}}</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-row>
