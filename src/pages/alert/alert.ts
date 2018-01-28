@@ -4,6 +4,7 @@ import { Vibration } from '@ionic-native/vibration';
 import { SMS } from '@ionic-native/sms';
 import { HomePage } from '../home/home';
 import { AppPreferences } from '@ionic-native/app-preferences';
+import { SettingsPage } from '../settings/settings';
 
 /**
  * Generated class for the AlertPage page.
@@ -39,7 +40,7 @@ export class AlertPage {
     this.settings = {};
     let ps = [];
     let loadOne = (name, spot, def) => {
-      let t = this.appPreferences.fetch(name).then(d => { this.settings[spot] = d || def; });
+      let t = this.appPreferences.fetch(name).then(d => { this.settings[spot] = d /*|| def*/; });
       ps.push(t);
       return t;
     }
@@ -51,16 +52,28 @@ export class AlertPage {
     loadOne("Send location", "sendLocation", true);
 
     Promise.all(ps).then(d => {
-      this.alertCountDown = this.settings.timeout;
-      this.alertCountTimeout = setInterval(() => {
-        if (--this.alertCountDown >= 1) {
-          this.onTimeIn();
+      let allowContinue = true;
+      for (let key in this.settings){
+        if (!this.settings[key]){
+          this.switchToSettings("You seem to have not filled out some settings. Would you like to do that now to enable this feature?");
+          allowContinue = false;
+          return;
         }
-        else {
-          clearInterval(this.alertCountTimeout);
-          this.onTimeOut();
-        }
-      }, 1000);
+      }
+
+      if (allowContinue){
+        this.alertCountDown = this.settings.timeout;
+        this.alertCountTimeout = setInterval(() => {
+          if (--this.alertCountDown >= 1) {
+            this.onTimeIn();
+          }
+          else {
+            clearInterval(this.alertCountTimeout);
+            this.onTimeOut();
+          }
+        }, 1000);
+      }
+
     }).catch(d => { console.error(d); });
 
     this.keypadInput = "";
@@ -107,6 +120,21 @@ export class AlertPage {
       title: title,
       subTitle: body,
       buttons: ['Dismiss']
+    });
+    alert.present();
+  }
+
+  switchToSettings(problem){
+    let alert = this.alertCtrl.create({
+      title: "Missing setting",
+      subTitle: problem,
+      buttons: [{
+        text : "Go to settings",
+        role : "cancel",
+        handler : () => {
+          this.navCtrl.push(SettingsPage);
+        }
+      }]
     });
     alert.present();
   }

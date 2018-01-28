@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+//import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import * as marked from 'marked';
 import { Http } from '@angular/http';
@@ -44,7 +44,7 @@ export class AboutPage {
         return t;
       };
 
-      var t = data._body.split("\n\n");
+      var t = data["_body"].split("\n\n");
       for (var i = 0; i < t.length; i++){
         r += "<ion-item>" + one(t[i]) + "</ion-item>";
       }
