@@ -20,8 +20,7 @@ export class CreatePasscodePage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
 
-  this.keypadInput = "2";
-  console.log(this.keypadInput);
+  this.keypadInput = "";
 }
 
   ionViewDidLoad() {
@@ -32,6 +31,14 @@ export class CreatePasscodePage {
     this.navCtrl.push(HomePage);
   }
   logKey(n){
+    this.keypadInput += "" + n;
+    console.log(this.keypadInput);
+
+    if(this.keypadInput.length == 4){
+      console.log("Passcode Completed");
+      console.log(this.keypadInput)
+      this.keypadInput = "";
+    }
 
   }
 }
