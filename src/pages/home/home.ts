@@ -15,8 +15,8 @@ declare var google: any;
 })
 export class HomePage {
   @ViewChild('map') mapElement: any;
-  @ViewChild('alertButton') alertButton : any;
-  @ViewChild('openButton') openButton : any;
+  @ViewChild('alertButton') alertButton: any;
+  @ViewChild('openButton') openButton: any;
   addressElement: HTMLInputElement = null;
 
   map: any;
@@ -24,7 +24,7 @@ export class HomePage {
   error: any;
   currentregional: any;
   MYLOC: any;
-  keypadInput : any;
+  keypadInput: any;
 
   constructor(
     public loadingCtrl: LoadingController,
@@ -61,15 +61,15 @@ export class HomePage {
       return new Promise<{}>(resolve => {
         this.http.get(`http://opendata.br7.org.il/datasets/geojson/${name}.geojson`).subscribe(data => {
           let r = JSON.parse(data["_body"])["features"];
-          if (!Array.isArray(r)){ throw "Data downloaded is not array"; }
+          if (!Array.isArray(r)) { throw "Data downloaded is not array"; }
 
-          for(let item in r){
-            if (r[0].type !== "Feature"){
+          for (let item in r) {
+            if (r[0].type !== "Feature") {
               throw "Validation failed";
             }
           }
 
-          if (!r.hasOwnProperty("length")){
+          if (!r.hasOwnProperty("length")) {
             throw "Validation failed";
           }
 
@@ -81,20 +81,20 @@ export class HomePage {
     load("street_light").then(heatmapData => {
       this.showToast("Loaded street lights");
       var data = [];
-      for (var key in heatmapData){
+      for (var key in heatmapData) {
         data.push(this.getCoordinates(heatmapData[key]));
       }
       var heatmap = new google.maps.visualization.HeatmapLayer({
         data: data,
         gradient: ["rgba(0,0,0,0)", "rgba(253, 251, 149, 0.9)"]
       });
-      console.log({"lat": data[0].lat(), "long": data[0].lng()});
+      console.log({ "lat": data[0].lat(), "long": data[0].lng() });
       heatmap.setMap(this.map);
     });
 
     load("cameras").then(d => {
       this.showToast("Loaded security cameras");
-      for (var i = 0; i < d["length"]; i++){
+      for (var i = 0; i < d["length"]; i++) {
         let item = d[i];
         this.placeMarker({
           "lat": item.properties.Y,
@@ -123,7 +123,7 @@ export class HomePage {
       var mapEle = this.mapElement.nativeElement;
       this.map = new google.maps.Map(mapEle, {
         // zoom: 10,
-         center: { lat: 34.793139, lng: 31.251530 },
+        center: { lat: 34.793139, lng: 31.251530 },
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         styles: [
           {
@@ -190,12 +190,16 @@ export class HomePage {
         console.error(e);
       }
 
+      var icon = {
+        url: '../../assets/icon/myLocation.png', // url
+        scaledSize: new google.maps.Size(32, 32), // scaled size
+        origin: new google.maps.Point(0, 0), // origin
+        anchor: new google.maps.Point(0, 0) // anchor
+      };
+
       this.MYLOC = new google.maps.Marker({
         clickable: false,
-        icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
-          new google.maps.Size(22, 22),
-          new google.maps.Point(0, 18),
-          new google.maps.Point(11, 11)),
+        icon: icon,
         shadow: null,
         zIndex: 999,
         map: this.map// your google.maps.Map object
@@ -203,14 +207,14 @@ export class HomePage {
     });
   }
 
-  lastPos : any;
+  lastPos: any;
 
   moveTo(data) {
     //console.log(data);
-    if (this.lastPos == data){
+    if (this.lastPos == data) {
       return;
     }
-    else{
+    else {
       this.lastPos = data;
     }
 
@@ -239,7 +243,7 @@ export class HomePage {
 
     let t = () => {
       setTimeout(() => {
-        if (!test()){
+        if (!test()) {
           action();
           t();
         }
@@ -258,7 +262,7 @@ export class HomePage {
   }
 
 
-placeMarker(options){
+  placeMarker(options) {
     var marker = new google.maps.Marker({
       map: this.map,
       position: { lat: options.lat || 0, lng: options.long || 0 },
@@ -317,7 +321,7 @@ placeMarker(options){
     toast.present();
   }
 
-  alertOpen(event){
+  alertOpen(event) {
     console.log("Alert open");
     //this.alertButton.classList.toggle("invisible");
     //this.openButton.classList.toggle("invisible");
@@ -325,7 +329,7 @@ placeMarker(options){
     this.openButton.setElementClass("invisible", true);
   }
 
-  alert_start(event){
+  alert_start(event) {
     //this.showToast("Start");
     event.target.classList.toggle("pressDown", true);
     event.target.innerText = "Armed";
@@ -333,7 +337,7 @@ placeMarker(options){
     console.log(event.target.className);
   }
 
-  alert_end(event){
+  alert_end(event) {
     //this.showToast("End");
     event.target.classList.toggle("pressDown", false);
     event.target.innerText = "Idle";
