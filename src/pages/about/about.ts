@@ -30,6 +30,7 @@ export class AboutPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad AboutPage');
     this.http.get("https://rawgit.com/HIQUALITYSTARTUPAFLIT/safe-7/master/README.md").subscribe(data => {
+      console.log("Downloaded README.md");
       let r = "<ion-list>";
 
       let one = (body) => {

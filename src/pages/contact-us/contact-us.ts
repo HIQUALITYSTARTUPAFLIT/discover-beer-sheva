@@ -31,13 +31,13 @@ export class ContactUsPage {
   }
 
   submit(){
-
     let m = this.commentField.nativeElement.value;
     let data = {
       "Name": "Debug app",
       "Email": "dan@bigidea.co.il",
       "Message": m
     };
+    console.log("Submitting", m);
     this.http.post("http://startups.cdi-negev.com/send-email.php", data).subscribe(d => console.log(d));
   }
 
