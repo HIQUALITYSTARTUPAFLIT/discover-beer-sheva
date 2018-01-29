@@ -21,6 +21,7 @@
     "@angular/http": "4.4.3",
     "@angular/platform-browser": "4.4.3",
     "@angular/platform-browser-dynamic": "4.4.3",
+    "@ionic-native/android-permissions": "^4.5.3",
     "@ionic-native/app-preferences": "^4.5.3",
     "@ionic-native/core": "4.3.0",
     "@ionic-native/email-composer": "^4.5.2",
@@ -36,6 +37,7 @@
     "cordova-browser": "5.0.3",
     "cordova-ios": "4.5.4",
     "cordova-plugin-advanced-http": "^1.9.1",
+    "cordova-plugin-android-permissions": "^1.0.0",
     "cordova-plugin-app-preferences": "^0.99.3",
     "cordova-plugin-device": "^1.1.7",
     "cordova-plugin-email-composer": "^0.8.13",
@@ -88,7 +90,8 @@
       "cordova-plugin-advanced-http": {},
       "cordova-plugin-vibration": {},
       "cordova-sms-plugin": {},
-      "cordova-plugin-app-preferences": {}
+      "cordova-plugin-app-preferences": {},
+      "cordova-plugin-android-permissions": {}
     },
     "platforms": [
       "ios",

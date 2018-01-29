@@ -19,7 +19,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { HttpModule } from '@angular/http';
 import { AppPreferences } from '@ionic-native/app-preferences';
 
-
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { Vibration } from '@ionic-native/vibration';
 import { SMS } from '@ionic-native/sms';
 
@@ -55,6 +55,7 @@ import { SMS } from '@ionic-native/sms';
     Vibration,
     SMS,
     AppPreferences,
+    AndroidPermissions,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

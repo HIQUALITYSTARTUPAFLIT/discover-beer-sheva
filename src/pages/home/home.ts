@@ -5,6 +5,7 @@ import { Http } from '@angular/http';
 import * as utmObj from 'utm-latlng';
 import { AlertPage } from '../alert/alert';
 import { OfflinePage } from '../offline/offline';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 //var utmObj = require('utm-latlng');
 
 declare var google: any;
@@ -15,8 +16,8 @@ declare var google: any;
 })
 export class HomePage {
   @ViewChild('map') mapElement: any;
-  @ViewChild('alertButton') alertButton : any;
-  @ViewChild('openButton') openButton : any;
+  @ViewChild('alertButton') alertButton: any;
+  @ViewChild('openButton') openButton: any;
   addressElement: HTMLInputElement = null;
 
   map: any;
@@ -24,7 +25,7 @@ export class HomePage {
   error: any;
   currentregional: any;
   MYLOC: any;
-  keypadInput : any;
+  keypadInput: any;
 
   constructor(
     public loadingCtrl: LoadingController,
@@ -38,11 +39,15 @@ export class HomePage {
     public actionSheetCtrl: ActionSheetController,
     public geolocation: Geolocation,
     public http: Http,
+    private androidPermissions: AndroidPermissions
   ) {
     this.keypadInput = "";
     this.platform.ready().then(() => {
-      this.loadMaps();
-      this.loadMarkers();
+      this.resolvePermissions().then(() => {
+        console.log("Permissions working");
+        this.loadMaps();
+        this.loadMarkers();
+      }).catch(err => console.error(err.message));
     });
   }
 
@@ -59,18 +64,18 @@ export class HomePage {
         this.http.get(`http://opendata.br7.org.il/datasets/geojson/${name}.geojson`).subscribe(data => {
 
           let r = JSON.parse(data["_body"])["features"];
-          if (!Array.isArray(r)){ throw "Data downloaded is not array"; }
+          if (!Array.isArray(r)) { throw "Data downloaded is not array"; }
 
-          for(let item in r){
-            if (r[0].type !== "Feature"){
+          for (let item in r) {
+            if (r[0].type !== "Feature") {
               throw "Validation failed";
             }
           }
 
-          if (!r.hasOwnProperty("length")){
+          if (!r.hasOwnProperty("length")) {
             throw "Validation failed";
           }
-          console.log(`Downloaded ${data.length} items from ${name}`);
+          console.log(`Downloaded items from ${name}`);
           resolve(r);
         });
       });
@@ -81,7 +86,7 @@ export class HomePage {
       console.log("Loaded street lights");
 
       var data = [];
-      for (var key in heatmapData){
+      for (var key in heatmapData) {
         data.push(this.getCoordinates(heatmapData[key]));
       }
       console.log("Processed coordinates", data);
@@ -98,7 +103,7 @@ export class HomePage {
     load("cameras").then(d => {
       this.showToast("Loaded security cameras");
       console.log("Loaded security cameras");
-      for (var i = 0; i < d["length"]; i++){
+      for (var i = 0; i < d["length"]; i++) {
         let item = d[i];
         this.placeMarker({
           "lat": item.properties.Y,
@@ -130,7 +135,7 @@ export class HomePage {
       var mapEle = this.mapElement.nativeElement;
       this.map = new google.maps.Map(mapEle, {
         // zoom: 10,
-        center: { lat: 34.793139, lng: 31.251530 },
+        center: { lat: 34.7915, lng: 31.2530 },
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         styles: [
           {
@@ -193,7 +198,9 @@ export class HomePage {
         let watch = this.geolocation.watchPosition();
         console.log("Watching position", watch);
         watch.subscribe(data => this.moveTo(data));
-        this.geolocation.getCurrentPosition().then(data => this.moveTo(data));
+        this.geolocation.getCurrentPosition()
+          .then(data => this.moveTo(data))
+          .catch(err => console.error(err));
       }
       catch (e) {
         this.showToast("Unable to pan to location");
@@ -217,89 +224,97 @@ export class HomePage {
     });
   }
 
-  lastPos : any;
+  lastPos: any;
 
   moveTo(data) {
-    console.log("Moving to position", data);
-    if (this.lastPos == data){
+    console.log("Moving to position");
+    if (data == {}) {
+      console.log("Data unavaliable", data);
+      return;
+    }
+    /*if (this.lastPos == data){
       console.log("Skip");
       return;
     }
     else{
       this.lastPos = data;
-    }
+    }*/
+    try {
+      let lg = new google.maps.LatLng(data.coords.latitude, data.coords.longitude);
+      const beerSheva = new google.maps.LatLng(31.2530, 34.7915);
 
-    let lg = new google.maps.LatLng(data.coords.latitude, data.coords.longitude);
-    const beerSheva = new google.maps.LatLng(31.2530, 34.7915);
+      let action = () => {
+        console.log("Try move");
+        this.map.setZoom(20);
+        this.map.panTo(lg);
+        this.MYLOC.setPosition(lg);
 
-    let action = () => {
-      console.log("Try move");
-      this.map.setZoom(20);
-      this.map.panTo(lg);
-      this.MYLOC.setPosition(lg);
-
-      function deg2rad(deg) {
-        return deg * (Math.PI/180)
-      }
-
-      function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
-        var R = 6371; // Radius of the earth in km
-        var dLat = deg2rad(lat2-lat1);  // deg2rad below
-        var dLon = deg2rad(lon2-lon1);
-        var a =
-          Math.sin(dLat/2) * Math.sin(dLat/2) +
-          Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-          Math.sin(dLon/2) * Math.sin(dLon/2)
-          ;
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        var d = R * c; // Distance in km
-        return d;
-      }
-      let d = getDistanceFromLatLonInKm(lg.lat(), lg.lng(), beerSheva.lat(), beerSheva.lng());
-      console.log("Testing distance from home", d);
-      if (d > 5){
-        //this.errorAlert("Error", "");
-        this.alertCtrl.create({
-          "title" : "Out of range",
-          "subTitle" : "This app was only meant to work in Be'er Sheva, some features may not apply",
-          "buttons" : [
-            {
-              text: "Ok"
-            },
-            {
-              text : "Close app",
-              handler : () => {
-                console.log("Exit app");
-                this.platform.exitApp();
-              }
-            }
-          ]
-        }).present();
-      }
-    };
-    let test = () => {
-      let mapLat = this.map.getCenter().lat();
-      let mapLng = this.map.getCenter().lng();
-      let myLat = lg.lat();
-      let myLng = lg.lng();
-
-      let t = (n) => { return 0 < Math.abs(n) && Math.abs(n) < 0.001; };
-
-      let r = t(mapLat - myLat) && t(mapLng - myLng);
-      console.log("Testing movement success", r);
-      return r;
-    }
-
-    let t = () => {
-      setTimeout(() => {
-        console.log("Trying");
-        if (!test()){
-          action();
-          t();
+        function deg2rad(deg) {
+          return deg * (Math.PI / 180)
         }
-      }, 500);
+
+        function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+          var R = 6371; // Radius of the earth in km
+          var dLat = deg2rad(lat2 - lat1);  // deg2rad below
+          var dLon = deg2rad(lon2 - lon1);
+          var a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2)
+            ;
+          var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          var d = R * c; // Distance in km
+          return d;
+        }
+        let d = getDistanceFromLatLonInKm(lg.lat(), lg.lng(), beerSheva.lat(), beerSheva.lng());
+        console.log("Testing distance from home", d);
+        if (d > 5) {
+          //this.errorAlert("Error", "");
+          this.alertCtrl.create({
+            "title": "Out of range",
+            "subTitle": "This app was only meant to work in Be'er Sheva, some features may not apply",
+            "buttons": [
+              {
+                text: "Ok"
+              },
+              {
+                text: "Close app",
+                handler: () => {
+                  console.log("Exit app");
+                  this.platform.exitApp();
+                }
+              }
+            ]
+          }).present();
+        }
+      };
+      let test = () => {
+        let mapLat = this.map.getCenter().lat();
+        let mapLng = this.map.getCenter().lng();
+        let myLat = lg.lat();
+        let myLng = lg.lng();
+
+        let t = (n) => { return 0 < Math.abs(n) && Math.abs(n) < 0.001; };
+
+        let r = t(mapLat - myLat) && t(mapLng - myLng);
+        console.log("Testing movement success", r);
+        return r;
+      }
+
+      let t = () => {
+        setTimeout(() => {
+          console.log("Trying");
+          if (!test()) {
+            action();
+            t();
+          }
+        }, 500);
+      }
+      t();
     }
-    t();
+    catch (e) {
+      console.error(e.message);
+    }
 
     console.log({
       "zoom": this.map.getZoom(),
@@ -312,7 +327,7 @@ export class HomePage {
   }
 
 
-placeMarker(options){
+  placeMarker(options) {
     var marker = new google.maps.Marker({
       map: this.map,
       position: { lat: options.lat || 0, lng: options.long || 0 },
@@ -371,7 +386,7 @@ placeMarker(options){
     toast.present();
   }
 
-  alertOpen(event){
+  alertOpen(event) {
     console.log("Alert open");
     //this.alertButton.classList.toggle("invisible");
     //this.openButton.classList.toggle("invisible");
@@ -379,7 +394,7 @@ placeMarker(options){
     this.openButton.setElementClass("invisible", true);
   }
 
-  alert_start(event){
+  alert_start(event) {
     //this.showToast("Start");
     event.target.classList.toggle("pressDown", true);
     event.target.innerText = "Armed";
@@ -387,7 +402,7 @@ placeMarker(options){
     console.log("Alert started", event.target.className);
   }
 
-  alert_end(event){
+  alert_end(event) {
     //this.showToast("End");
     event.target.classList.toggle("pressDown", false);
     event.target.innerText = "Idle";
@@ -395,4 +410,35 @@ placeMarker(options){
     this.nav.push(AlertPage);
   }
 
+  resolvePermissions() {
+    console.log("Testing permissions")
+    var ps = [];
+
+    let one = (name) => {
+      console.log(`Permission ${name}`);
+      let t = this.androidPermissions.checkPermission(name);
+      ps.push(t);
+      return t;
+    };
+
+    const permissions = [
+      "ACCESS_COARSE_LOCATION",
+      "ACCESS_FINE_LOCATION",
+      "ACCESS_LOCATION_EXTRA_COMMANDS",
+      "CONTROL_LOCATION_UPDATES",
+      "LOCATION_HARDWARE",
+      "INTERNET",
+      "SEND_SMS",
+      "VIBRATE"
+    ];
+
+    this.androidPermissions.requestPermissions(permissions).then(d => {
+      for (let key in permissions) {
+        let item = permissions[key];
+        one(item).then(d => console.log(item, d)).catch(e => console.error(item, e.message));
+      }
+    });
+
+    return Promise.all(ps);
+  }
 }
