@@ -241,7 +241,9 @@ export class HomePage {
         var d = R * c; // Distance in km
         return d;
       }
-      if (getDistanceFromLatLonInKm(lg.lat(), lg.lng(), beerSheva.lat(), beerSheva.lng()) > 5){
+      let d = getDistanceFromLatLonInKm(lg.lat(), lg.lng(), beerSheva.lat(), beerSheva.lng());
+      console.log(d);
+      if (d > 5){
         //this.errorAlert("Error", "");
         this.alertCtrl.create({
           "title" : "Out of range",
