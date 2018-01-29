@@ -42,6 +42,7 @@ export class AlertPage {
     this.settings = {};
     let ps = [];
     let loadOne = (name, spot, def) => {
+      console.log(`Loading ${name} to ${spot}`);
       let t = this.appPreferences.fetch(name).then(d => { this.settings[spot] = d /*|| def*/; });
       ps.push(t);
       return t;
@@ -57,6 +58,7 @@ export class AlertPage {
       let allowContinue = true;
       for (let key in this.settings){
         if (this.settings[key] === undefined){
+          console.log("User failed to fill out settings");
           this.switchToSettings("You seem to have not filled out some settings. Would you like to do that now to enable this feature?");
           allowContinue = false;
           return;
@@ -67,9 +69,11 @@ export class AlertPage {
         this.alertCountDown = this.settings.timeout;
         this.alertCountTimeout = setInterval(() => {
           if (--this.alertCountDown >= 1) {
+            console.log("Time in");
             this.onTimeIn();
           }
           else {
+            console.log("Time out");
             clearInterval(this.alertCountTimeout);
             this.onTimeOut();
           }
@@ -96,9 +100,10 @@ export class AlertPage {
   sendKey(n): void {
     //this.keyPadStatus.innerText += "●";
     this.keypadInput += "" + n;
-    console.log(typeof (n), this.keypadInput);
+    console.log("Key press", this.keypadInput);
 
     if (this.keypadInput == this.settings.pass) {
+      console.log("Disarming");
       clearInterval(this.alertCountTimeout);
       this.presentAlert("Alert", "Disarmed text");
       this.navCtrl.push(HomePage);
@@ -106,27 +111,30 @@ export class AlertPage {
   }
 
   onTimeIn() {
+    console.log("Vibrate");
     this.vibration.vibrate(500);
   }
 
   onTimeOut() {
     let send = (m) => {
       this.sms.send(this.settings.phone, m)
-        .then(d => { console.log(d); })
+        .then(d => { console.log("Success", d); })
         .catch(e => {
           this.presentAlert("Text error", "Unable to send text");
-          console.error(e);
+          console.error("Failure", e);
          });
     };
 
+    console.log("Sending main text");
     send('**SOS**\nYou have received this message because I am currently in destress\n\n\"' + this.settings.message + "\"")
 
     if(this.settings.sendLocation){
+      console.log("Sending current location");
       this.geolocation.getCurrentPosition().then(data => {
         send(`Here's my current location\n\nhttp://www.google.com/maps/place/${data.coords.latitude},${data.coords.longitude}`);
       })
     }
-
+    console.log("Wrapping up");
     this.presentAlert("Alert", "Emergency text sent to " + this.settings.phone);
     this.navCtrl.push(HomePage);
   }
@@ -137,6 +145,7 @@ export class AlertPage {
       subTitle: body,
       buttons: ['Dismiss']
     });
+    console.log("Presenting alert", [title, body]);
     alert.present();
   }
 
@@ -152,6 +161,7 @@ export class AlertPage {
         }
       }]
     });
+    console.log("Asked to switch to settings");
     alert.present();
   }
 }

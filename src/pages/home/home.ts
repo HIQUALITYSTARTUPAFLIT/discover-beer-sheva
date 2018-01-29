@@ -57,6 +57,7 @@ export class HomePage {
     let load = (name: string): Promise<{}> => {
       return new Promise<{}>(resolve => {
         this.http.get(`http://opendata.br7.org.il/datasets/geojson/${name}.geojson`).subscribe(data => {
+
           let r = JSON.parse(data["_body"])["features"];
           if (!Array.isArray(r)){ throw "Data downloaded is not array"; }
 
@@ -69,7 +70,7 @@ export class HomePage {
           if (!r.hasOwnProperty("length")){
             throw "Validation failed";
           }
-
+          console.log(`Downloaded ${data.length} items from ${name}`);
           resolve(r);
         });
       });
@@ -77,21 +78,26 @@ export class HomePage {
 
     load("streetlight_epsg4326").then(heatmapData => {
       this.showToast("Loaded street lights");
+      console.log("Loaded street lights");
+
       var data = [];
       for (var key in heatmapData){
         data.push(this.getCoordinates(heatmapData[key]));
       }
+      console.log("Processed coordinates", data);
+
       var heatmap = new google.maps.visualization.HeatmapLayer({
         data: data,
         gradient: ["rgba(0,0,0,0)", "rgba(253, 251, 149, 0.9)"],
         maxIntensity: 1
       });
-      console.log({"lat": data[0].lat(), "long": data[0].lng()});
+      console.log("Generated heatmap", heatmap);
       heatmap.setMap(this.map);
     });
 
     load("cameras").then(d => {
       this.showToast("Loaded security cameras");
+      console.log("Loaded security cameras");
       for (var i = 0; i < d["length"]; i++){
         let item = d[i];
         this.placeMarker({
@@ -105,13 +111,16 @@ export class HomePage {
           }
         });
       }
+      console.log("Placed all cameras");
     });
   }
 
   loadMaps() {
     if (google) {
+      console.log("init map");
       this.initializeMap();
     } else {
+      console.error("internet");
       this.errorAlert('Error', 'Something went wrong with the Internet Connection. Please check your Internet.')
     }
   }
@@ -121,7 +130,7 @@ export class HomePage {
       var mapEle = this.mapElement.nativeElement;
       this.map = new google.maps.Map(mapEle, {
         // zoom: 10,
-         center: { lat: 34.793139, lng: 31.251530 },
+        center: { lat: 34.793139, lng: 31.251530 },
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         styles: [
           {
@@ -164,8 +173,9 @@ export class HomePage {
         zoomControl: false,
         scaleControl: false,
       });
-
+      console.log("Spawned map")
       google.maps.event.addListenerOnce(this.map, 'idle', () => {
+        console.log("Map idle");
         google.maps.event.trigger(this.map, 'resize');
         mapEle.classList.add('show-map');
         this.bounceMap([]);
@@ -173,6 +183,7 @@ export class HomePage {
       });
 
       google.maps.event.addListener(this.map, 'bounds_changed', () => {
+        console.log("Bounds changed");
         this.zone.run(() => {
           this.resizeMap();
         });
@@ -180,6 +191,7 @@ export class HomePage {
 
       try {
         let watch = this.geolocation.watchPosition();
+        console.log("Watching position", watch);
         watch.subscribe(data => this.moveTo(data));
         this.geolocation.getCurrentPosition().then(data => this.moveTo(data));
       }
@@ -194,7 +206,6 @@ export class HomePage {
         origin: new google.maps.Point(0, 0), // origin
         anchor: new google.maps.Point(0, 0) // anchor
       };
-
       this.MYLOC = new google.maps.Marker({
         clickable: false,
         icon: icon,
@@ -202,14 +213,16 @@ export class HomePage {
         zIndex: 999,
         map: this.map// your google.maps.Map object
       });
+      console.log("Placed the 'my location' marker", this.MYLOC);
     });
   }
 
   lastPos : any;
 
   moveTo(data) {
-    //console.log(data);
+    console.log("Moving to position", data);
     if (this.lastPos == data){
+      console.log("Skip");
       return;
     }
     else{
@@ -220,6 +233,7 @@ export class HomePage {
     const beerSheva = new google.maps.LatLng(31.2530, 34.7915);
 
     let action = () => {
+      console.log("Try move");
       this.map.setZoom(20);
       this.map.panTo(lg);
       this.MYLOC.setPosition(lg);
@@ -242,7 +256,7 @@ export class HomePage {
         return d;
       }
       let d = getDistanceFromLatLonInKm(lg.lat(), lg.lng(), beerSheva.lat(), beerSheva.lng());
-      console.log(d);
+      console.log("Testing distance from home", d);
       if (d > 5){
         //this.errorAlert("Error", "");
         this.alertCtrl.create({
@@ -255,6 +269,7 @@ export class HomePage {
             {
               text : "Close app",
               handler : () => {
+                console.log("Exit app");
                 this.platform.exitApp();
               }
             }
@@ -270,11 +285,14 @@ export class HomePage {
 
       let t = (n) => { return 0 < Math.abs(n) && Math.abs(n) < 0.001; };
 
-      return t(mapLat - myLat) && t(mapLng - myLng);
+      let r = t(mapLat - myLat) && t(mapLng - myLng);
+      console.log("Testing movement success", r);
+      return r;
     }
 
     let t = () => {
       setTimeout(() => {
+        console.log("Trying");
         if (!test()){
           action();
           t();
@@ -325,7 +343,7 @@ placeMarker(options){
   }
 
   ionViewDidLoad() {
-
+    console.log("Loaded home page");
   }
   //Center zoom
   //http://stackoverflow.com/questions/19304574/center-set-zoom-of-map-to-cover-all-visible-markers
@@ -338,6 +356,7 @@ placeMarker(options){
 
     this.map.fitBounds(bounds);
   }
+
   resizeMap() {
     setTimeout(() => {
       google.maps.event.trigger(this.map, 'resize');
@@ -365,14 +384,14 @@ placeMarker(options){
     event.target.classList.toggle("pressDown", true);
     event.target.innerText = "Armed";
 
-    console.log(event.target.className);
+    console.log("Alert started", event.target.className);
   }
 
   alert_end(event){
     //this.showToast("End");
     event.target.classList.toggle("pressDown", false);
     event.target.innerText = "Idle";
-    //this.keyPad.nativeElement.classList.toggle("invisible");
+    console.log("Alert ended");
     this.nav.push(AlertPage);
   }
 

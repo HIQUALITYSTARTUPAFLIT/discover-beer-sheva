@@ -49,9 +49,10 @@ export class SettingsPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, private appPreferences: AppPreferences,
   public toastCtrl: ToastController) {
     this.result = {};
-
+    console.log("Constructing settings page");
     let ps = [];
     let loadOne = (name) => {
+      console.log("Loading setting", name);
       let t = this.appPreferences.fetch(name).then(d => {
         //this.template[spot].default = d;
         for (var i = 0; i < this.template.length; i++) {
@@ -70,7 +71,12 @@ export class SettingsPage {
     loadOne("Custom message");
     loadOne("Send location");
 
-    Promise.all(ps).then(d => this.showToast("Loaded previous settings")).catch(e => console.log(e));
+    Promise.all(ps).then(d => {
+      console.log("Loaded previous settings")
+      this.showToast("Loaded previous settings");
+    }).catch(e => {
+      console.error(e);
+    });
   }
 
   ionViewDidLoad() {
@@ -97,7 +103,7 @@ export class SettingsPage {
   }
 
   save() {
-    console.log(this.result);
+    console.log("Saving", this.result);
     for (let key in this.result) {
       this.appPreferences.store(key, this.result[key])
         .then(d => console.log(d))
