@@ -196,8 +196,8 @@ export class HomePage {
 
       try {
         let watch = this.geolocation.watchPosition();
-        console.log("Watching position", watch);
-        watch.subscribe(data => this.moveTo(data));
+        //console.log("Watching position", watch);
+        //watch.subscribe(data => this.moveTo(data));
         this.geolocation.getCurrentPosition()
           .then(data => this.moveTo(data))
           .catch(err => console.error(err));
