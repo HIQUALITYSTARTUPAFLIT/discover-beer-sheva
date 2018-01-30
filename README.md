@@ -36,6 +36,7 @@ This repository is still maintained and will be reviewing pull requests
 * Contact-Us dose not provide notification that message has been sent
 * Contact-Us dose not ask for a reply email
 * About page dosen't work right
+* A misspelling on the emergency text
 * Battery usage issues
 * Performance issues
 
