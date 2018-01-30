@@ -35,6 +35,7 @@ This repository is still maintained and will be reviewing pull requests
 * "Send Location" switches off for like, no reason
 * Contact-Us dose not provide notification that message has been sent
 * Contact-Us dose not ask for a reply email
+* About page dosen't work right
 * Battery usage issues
 * Performance issues
 
@@ -59,7 +60,3 @@ This repository is still maintained and will be reviewing pull requests
 ### - Jake Pursky (Chief Planning Director)
 
 ### - Rob Levine (Director of Art's and marketing)
-
-### - Evan Saulsbury (Mascot)
-
-### - Ariel Moskowitz (Emotional Support for Lead Developer)
